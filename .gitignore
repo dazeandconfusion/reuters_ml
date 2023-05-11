@@ -3,7 +3,7 @@
 .dvc/cache
 .dvc/tmp
 venv
-reuters_ml/experiments/data/*.csv
-reuters_ml/experiments/data/*.txt
-reuters_ml/service/inference/models/
+experiments/data/*.csv
+experiments/data/*.txt
+service/inference/models/
 

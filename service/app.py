@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from reuters_ml.service.inference import Inference
-from reuters_ml.service.pydantic_models import Output
+from service.inference.inference import Inference
+from service.pydantic_models import Output
 
 app = FastAPI()
 
