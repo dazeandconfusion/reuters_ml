@@ -1,0 +1,4 @@
+outs:
+- md5: 8763076226e7861bdd9d58b255b07726
+  size: 2417420
+  path: reuters_test.csv

@@ -1,0 +1,4 @@
+outs:
+- md5: 36ea91108f7b0f89478b377b815919bb
+  size: 936
+  path: stop_words.txt

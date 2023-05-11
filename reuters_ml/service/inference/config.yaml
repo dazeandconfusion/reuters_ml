@@ -1,0 +1,3 @@
+model: xgboost_v1
+mlb: mlb_v1
+vectorizer: vectorizer_v1

@@ -1,0 +1,4 @@
+outs:
+- md5: b8ab35a078550762ddf8f887525b255e
+  size: 6605204
+  path: reuters_train.csv
