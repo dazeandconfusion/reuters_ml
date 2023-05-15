@@ -86,12 +86,19 @@ response body:
 - **Model**: pre-trained TF-IDF vectorizer and XGBoost classifier
 
 ![AS-IS service structure](repo_utils/as_is.png)
-The current service provides a FastAPI interface that implements the usage of the multi-label XGBoost classifier. The classifier receives text data in a `string` format as an input and returns a list of predicted labels in a `string` format. If the classifier has not detected a label for the text, `None` will be returned.
+The current service provides a FastAPI interface that implements the usage of the multi-label XGBoost classifier. The classifier receives text data in a `string` format as an input and returns a list of predicted labels in a `string` format. If the classifier has not detected a label for the text, `None` will be returned. 
+
+Data for the model's pipeline training and inference is stored via DVC in the remote Google Drive directory.
 
 ### TO-BE
 #### Training
 ##### Top-level structure
 ![TO-BE training process](repo_utils/to_be/training.png)
+The model's lifecycle is presented as follows:
+1. Create model's training pipeline (TF-IDF + XGBoost) *.py scripts and store them in the current repository. Use `optuna` library for parameters tuning and create a `config.yaml` file where the hyperparameters for `optuna` tuning will be stored. Additionally, add `pytests` in the current repository for new preprocessing methods and scripts. `Pytests` will be launched as a git pre-push hook in order not to push glitched code in the repository.
+2. Deploy `Kubeflow Pipelines` for training pipelines. For this purpose develop a Kubeflow repository that will use `reuters_ml` project as an external library or submodule. Kubeflow use special DSL for pythonic pipelines launch, so there must be developed scripts that turn each python-pipeline into Kubeflow Pipeline via `kfp` library. Let this repository be `reuters_kfp`. Our `Kubeflow Pipelines` service must have an integration with S3 storage and Github.
+3. Via the terminal in Kubeflow Pipelines we will do `git pull` to pull our `reuters_ml` repository that will be used to launch Kubeflow Pipelines for experiments.
+4. Via the `Kubeflow Pipeline` interface or CLI parameters setting we will set multiple parameters for our training pipelines that will be launched. At the end of this step we will get the best variant of the model whose metric beats the previous best score. The artifacts of this model will be stored in S3.
 ##### Kubeflow Pipelines level structure
 ![TO-BE training process](repo_utils/to_be/kfp.png)
 ##### Inference service level structure
