@@ -6,13 +6,6 @@
 ## Task
 ### Objective
 Design a scalable, maintainable, and efficient machine learning system that handles hierarchical multi-label text classification for a growing dataset of news articles. The system should utilize cloud-based resources, support MLOps practices, and provide an API for integration with other applications.
-### Task Decomposition
-1. Analyze the requirements for a machine learning system that classifies news articles into hierarchical topics and subtopics. Consider factors such as data volume, model complexity, latency, and scalability.
-2. Design the overall architecture of the system, including data ingestion, storage, preprocessing, model training, evaluation, and deployment. Incorporate the use of cloud-based resources, such as Azure ML, to optimize for scalability and maintainability.
-3. Plan the integration of MLOps practices within the system, including continuous integration, continuous deployment, automated testing, and model monitoring.
-4. Develop an API design to enable other applications to interact with the deployed model and perform classification tasks.
-5. Address any security, privacy, and compliance concerns associated with the system, such as data storage, access control, and model explainability.
-6. Prepare a system design document that outlines the architectural decisions, components, data flow, and rationale behind your design choices. Include diagrams and illustrations to visualize the overall structure of the system.
 
 ### Deliverables
 1. A detailed system design document that includes architectural decisions, components, data flow, and rationale for design choices.
@@ -30,3 +23,50 @@ Design a scalable, maintainable, and efficient machine learning system that hand
 
 Conducted experiments have shown that the best F1-samples result leads to `TF-IDF + XGBoost`. 
 This model will further be used in the service development.
+
+## How to use
+### Requirements
+```bash
+python 3.9
+Docker
+```
+### Installation for developers
+1. Clone current repository via `git clone`
+2. Create virtual environment and install all requirements
+```bash
+cd reuters_ml
+python -m venv env
+source env/bin/activate
+pip install -r requirements/dev.txt -r requirements/core.txt
+dvc init
+dvc remote add --default myremote gdrive://{G_DIR_PATHNAME}
+dvc remote modify myremote gdrive_acknowledge_abuse true
+dvc pull
+```
+G_DIR_PATHNAME -- path to the Google Drive folder that contains DVC artifacts
+### Installation for service launch
+1. Do the steps provided in the `Installation for developers` section.
+2. Run commands
+```bash
+docker build . -t reuters_ml
+docker run -p 1234:1234 reuters_ml
+```
+
+## Service structure
+### AS-IS
+#### Artifacts:
+- **Input**: data in `str` format
+- **Output**: model's prediction in `List[str]` format or `None`
+- **Model**: pre-trained TF-IDF vectorizer and XGBoost classifier
+
+![AS-IS service structure](repo_utils/as_is.png)
+The current service provides a FastAPI interface that implements the usage of the multi-label XGBoost classifier. The classifier receives text data in a `string` format as an input and returns a list of predicted labels in a `string` format. If the classifier has not detected a label for the text, `None` will be returned.
+
+### TO-BE
+#### Training
+##### Top-level structure
+![TO-BE training process](repo_utils/to_be/training.png)
+##### Kubeflow Pipelines level structure
+![TO-BE training process](repo_utils/to_be/kfp.png)
+##### Inference service level structure
+![TO-BE training process](repo_utils/to_be/inference.png)

@@ -3,7 +3,7 @@ FROM python:3.9
 WORKDIR /app
 
 COPY service /app/service
-COPY requirements/prod.txt /app/requirements.txt
+COPY requirements/core.txt /app/requirements.txt
 
 RUN pip install -r requirements.txt
 

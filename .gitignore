@@ -1,7 +1,6 @@
 **/__pycache__/
 .idea/
-.dvc/cache
-.dvc/tmp
+.dvc
 venv
 experiments/data/*.csv
 experiments/data/*.txt
