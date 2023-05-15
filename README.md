@@ -51,6 +51,32 @@ G_DIR_PATHNAME -- path to the Google Drive folder that contains DVC artifacts
 docker build . -t reuters_ml
 docker run -p 1234:1234 reuters_ml
 ```
+3. Open http://0.0.0.0:1234/docs
+
+#### Service usage example
+text: `corn`
+
+response body:
+```bash
+{
+  "prediction": [
+    "corn",
+    "grain"
+  ]
+}
+```
+
+text: `.`
+
+response body:
+```bash
+{
+  "prediction": [
+    null
+  ]
+}
+```
+
 
 ## Service structure
 ### AS-IS
